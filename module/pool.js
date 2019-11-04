@@ -6,14 +6,18 @@ module.exports = {
     let result;
 
     try {
-      var connection = await pool.getConnection();
+      const connection = await pool.getConnection();
       
       result = await connection.query(query) || null; 
-    }catch(err){
-      next(err); 
-    }finally{
+
       connection.release();
       return result; 
+
+    }catch(err){
+      console.log('query error');
+      connection.release();
+      next(err); 
+    }finally{
     }
   },
 
@@ -24,14 +28,18 @@ module.exports = {
     let result;
 
     try {
-      var connection = await pool.getConnection();
+      const connection = await pool.getConnection();
      
       result = await connection.query(query, value) || null; 
-    }catch(err){
-      next(err); 
-    }finally{
+
       connection.release();
       return result; 
+
+    }catch(err){
+      console.log('query error');
+      connection.release();
+      next(err); 
+    }finally{
     }
   }
 };

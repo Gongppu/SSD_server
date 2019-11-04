@@ -18,9 +18,9 @@ router.get('/:id', async(req, res) => {
     `
     SELECT * FROM user
     WHERE usr_id = ?
-    `;
+  `;
 
-  var user_no;
+  var doc_no;
     try{
       let checkid = await db.queryParam_Arr(checkidQuery,[id]);
       console.log(checkid);
@@ -43,17 +43,15 @@ router.get('/:id', async(req, res) => {
         
         let autoincre = await db.queryParam_None(autoincre_Query);
         
-        user_no=autoincre[0].LAST;
+        doc_no=autoincre[0].LAST;
 
       }else{
           user_no=checkid.user_no[0];  
       }
-
       res.status(201).send({
         message : "success",
         no : user_no
       });
-        
     }catch(err){
       res.status(500).send({
         message : "Internal Server Error"
@@ -61,7 +59,7 @@ router.get('/:id', async(req, res) => {
       console.log(err);
       return;
     }
-  });
+});
 
   
     module.exports = router;
