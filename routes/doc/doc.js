@@ -40,6 +40,7 @@ router.post('/', async(req, res) => { //문서 저장
     /* user id 랑 doc id 일치 여부 확인*/
 
     try{
+
       let updatetitleQuery =
       `
       UPDATE ssd.doc SET doc_title = ? WHERE doc_id = ?
@@ -59,8 +60,15 @@ router.post('/', async(req, res) => { //문서 저장
     //  console.log('saved!');
     //});
   var str = doc_body ;
-  fs.writeFile('./'+doc_id+'.txt',str,function(err){
-      if(err) throw err;
+  console.log(process.cwd()+doc_id+'.txt');
+  fs.writeFile(process.cwd()+'/'+doc_id+'.txt',str,function(err){
+      if(err){
+        res.status(500).send({
+          message : "Internal Server Error"
+        });
+        console.log(err);
+        return;
+      }
       console.log('changed!');
   });
   res.status(201).send({

@@ -3,7 +3,7 @@ var router = express.Router();
 const db = require('../../module/pool.js');
 
 
-router.get('/add/:user_id', async(req, res) => { //문서 추가하기
+router.get('/:user_id', async(req, res) => { //문서 추가하기
     let user_id = req.params.user_id;
     console.log(user_id);
   
@@ -60,3 +60,5 @@ router.get('/add/:user_id', async(req, res) => { //문서 추가하기
       }
     });
   
+    
+  module.exports = router;
