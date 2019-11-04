@@ -25,18 +25,24 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
   
   let checkdocQuery =
     `
-    SELECT doc_id FROM ssd.user_doc
-    WHERE user_id = ?
+    SELECT d.doc_id, d.doc_title, ud.is_share 
+    FROM ssd.doc as d , ssd.user_doc as ud 
+    WHERE d.doc_id=ud.doc_id AND d.user_id = ?
     `;
 
     try{
       let checkdoc = await db.queryParam_Arr(checkdocQuery,[user_id]);
-      console.log(checkdoc[0]);
 
       let doc_list=[];
       if(checkdoc){
         for(var i=0;i<checkdoc[0].length ; i++){
-          doc_list.push(checkdoc[0][i].doc_id);
+          var doc_obj={
+            doc_id : checkdoc[0][i].doc_id,
+            doc_title : checkdoc[0][i].doc_title,
+            doc_is_share : checkdoc[0][i].is_share
+          };
+          
+          doc_list.push(doc_obj);
         }
       }
       res.status(201).send({

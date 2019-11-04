@@ -18,10 +18,11 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
   }
   /*doc id가 없을 경우 */
   /*doc id와 userid 가 다른 경우 */
-  fs.readFile('./'+doc_id+'.txt','utf-8',function(err,data){
+  fs.readFile(process.cwd()+'/'+doc_id+'.txt','utf-8',function(err,data){
     if(err) throw err;
     res.status(201).send({
       message : "success",
+      doc_id : doc_id,
       content : data
     });
     return;
