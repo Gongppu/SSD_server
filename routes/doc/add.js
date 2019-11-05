@@ -37,14 +37,7 @@ router.get('/:user_id', async(req, res) => { //문서 추가하기
         //'SELECT doc_id FROM ssd.doc WHERE doc_idx = (SELECT LAST_INSERT_ID())'; //랜덤 id 확인
         
         //let autoid = await db.queryParam_Arr(autoid_Query);
-  
-        //나중에 트리거로 생략 가능
-        let addrelationQuery =
-        `
-        INSERT INTO ssd.user_doc (doc_id, user_id) VALUES (?,?)
-        `;
-        
-        let addrelation = await db.queryParam_Arr(addrelationQuery,[doc_id,user_id]);
+
   
         res.status(201).send({
           message : "success",

@@ -9,25 +9,47 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
 
   if(!user_id || user_id=="undefined"){ //처음 접속하는 경우
 
-    let insertidQuery =
-    'INSERT INTO ssd.user(user_id) SELECT SUBSTR(CONCAT(MD5(RAND()),MD5(RAND())),1,36)';
-
-    let insertid = await db.queryParam_None(insertidQuery);
+    try{
+      let insertidQuery =
+      'INSERT INTO ssd.user(user_id) SELECT SUBSTR(CONCAT(MD5(RAND()),MD5(RAND())),1,36)';
+  
+      let insertid = await db.queryParam_None(insertidQuery);
+        
+      if(!insertid){
+        res.status(500).send({
+          message : "Internal Server Error"
+        });
+        return;
+      }
+      let automakeidQuery =
+      'SELECT user_id FROM ssd.user WHERE user_no = (SELECT LAST_INSERT_ID());';
+  
+      let automakeid = await db.queryParam_None(automakeidQuery);
+        
+      if(!automakeid){
+        res.status(500).send({
+          message : "Internal Server Error"
+        });
+        return;
+      }
       
-    if(!insertid){
+      user_id=automakeid[0][0].user_id;
+      
+    }catch(err){
       res.status(500).send({
         message : "Internal Server Error"
       });
+      console.log(err);
       return;
     }
-
+    
   }
   
   let checkdocQuery =
     `
     SELECT d.doc_id, d.doc_title, ud.is_share 
     FROM ssd.doc as d , ssd.user_doc as ud 
-    WHERE d.doc_id=ud.doc_id AND d.user_id = ?
+    WHERE d.doc_idx=ud.doc_idx AND d.user_id = ?
     `;
 
     try{
@@ -47,6 +69,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
       }
       res.status(201).send({
         message : "success",
+        user_id : user_id,
         list : doc_list
       });
         

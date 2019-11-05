@@ -78,4 +78,41 @@ router.post('/', async(req, res) => { //문서 저장
   });
 });
 
-  module.exports = router;
+router.delete('/:doc_id',async(req, res) => { //문서 삭제
+  let doc_id = req.params.doc_id;
+  let user_id=req.headers.user_id;
+
+  /* user id 랑 doc id 일치 여부 확인*/
+
+  try{
+    fs.unlink(process.cwd()+'/'+doc_id+'.txt', function(err){
+      if(err){
+        res.status(500).send({
+          message : "Internal Server Error"
+        });
+        console.log(err);
+        return;
+      }
+    });
+    let deletedocQuery =
+    `
+    DELETE FROM ssd.doc WHERE doc_id = ?
+    `;
+    
+    let deletedoc = await db.queryParam_Arr(deletedocQuery,[doc_id]);
+
+    res.status(201).send({
+      message : "success"
+    });
+    return;
+
+  }catch(err){
+    res.status(500).send({
+      message : "Internal Server Error"
+    });
+    console.log(err);
+    return;
+  }
+});
+
+module.exports = router;
