@@ -2,11 +2,11 @@ var express = require('express');
 var app=express();
 var router = express.Router();
 
-var client_id = '9eMFMfAmlQnUoBsxcubO';
-var client_secret = 'qKHnTBR90A';
+var client_id = 'n5L6cIX3kIJmf3CoR0hW';
+var client_secret = 'Nd43kUpV7M';
 var state = "RAMDOM_STATE";
-var url="localhost"
-var redirectURI = encodeURI("http://"+url+":3006/naver/callback");
+var url="sharesdocument.ml"
+var redirectURI = encodeURI("https://"+url+"/naver/callback");
 var api_url = "";
 
 router.get('/naverlogin', function (req, res) {
