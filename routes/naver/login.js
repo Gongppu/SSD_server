@@ -12,12 +12,12 @@ var api_url = "";
 router.get('/naverlogin', function (req, res) {
   console.log("sdc");
   api_url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirectURI + '&state=' + state;
-  res.status(201).send({
-    message : "success",
-    api_url : api_url
-  });
-  //res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
-   //res.end("<a href='"+ api_url + "'><img height='50' src='http://static.nid.naver.com/oauth/small_g_in.PNG'/></a>");
+  //res.status(201).send({
+  //  message : "success",
+  //  api_url : api_url
+  //});
+  res.writeHead(200, {'Content-Type': 'text/html;charset=utf-8'});
+  res.end("<a href='"+ api_url + "'><img height='50' src='http://static.nid.naver.com/oauth/small_g_in.PNG'/></a>");
  });
  router.get('/callback', function (req, res) {
     code = req.query.code;
@@ -36,7 +36,7 @@ router.get('/naverlogin', function (req, res) {
         let result=JSON.parse(body);
         
         var option={
-            url: 'http://'+url+':3006/naver/member',
+            url: 'https://'+url+'/naver/member',
             headers: {'access_token':result.access_token}    
         }
         request.get(option,function(error,response,body){
