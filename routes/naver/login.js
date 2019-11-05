@@ -35,20 +35,24 @@ router.get('/naverlogin', function (req, res) {
         //res.end(body);
         let result=JSON.parse(body);
         
-        var option={
-            url: 'https://'+url+'/naver/member',
-            headers: {'access_token':result.access_token}    
-        }
-        request.get(option,function(error,response,body){
-            if(!error && response.statusCode == 201){
+        res.status(201).send({
+          message : 'success',
+          name : result.access_token
+        });
+        // var option={
+        //     url: 'https://'+url+'/naver/member',
+        //     headers: {'access_token':result.access_token}    
+        // }
+        // request.get(option,function(error,response,body){
+        //     if(!error && response.statusCode == 201){
               
-              res.end(body);
+        //       res.end(body);
               
 
-            }else{
-                res.end("internal server error");
-            }
-        });
+        //     }else{
+        //         res.end("internal server error");
+        //     }
+        // });
       } else {
         res.status(response.statusCode).end();
         console.log('error = ' + response.statusCode);
@@ -72,7 +76,7 @@ router.get('/naverlogin', function (req, res) {
         console.log(result.response.name);
         res.status(201).send({
             message : 'success',
-            name : result.response.name
+            name : result.response.email
         });
         return;
       } else {
