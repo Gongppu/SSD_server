@@ -35,14 +35,16 @@ router.get('/naverlogin', function (req, res) {
         var options = {
             url: "https://"+url+"/naver/member/"+result.access_token
         };
+console.log(options);
         request.get(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            res.end("로그인 성공하였습니다.");
+            res.end("success login");
           }else{
             res.status(response.statusCode).end();
             console.log('error = ' + response.statusCode);
           }
         });
+	return;
       } else {
         res.status(response.statusCode).end();
         console.log('error = ' + response.statusCode);
@@ -65,11 +67,8 @@ router.get('/naverlogin', function (req, res) {
           
         var result=JSON.parse(body);
         console.log(result.response.email);
-        res.status(200).send({
-            message : 'success'
-        });
-
         return;
+
       } else {
         console.log('error');
         if(response != null) {
@@ -78,5 +77,6 @@ router.get('/naverlogin', function (req, res) {
         }
       }
     });
+	res.status(200).end();
   });
  module.exports = router;
