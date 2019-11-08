@@ -10,7 +10,7 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
   var doc_title;
   console.log(user_id);
 
-  if(!doc_id || !user_id){ //클라에서 id 미전달
+  if(!doc_id){ //클라에서 id 미전달
     res.status(401).send({
       message : "null value user_id"
     });
@@ -34,7 +34,7 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     console.log(err);
     return;
   }
-  
+
   /*doc id가 없을 경우 */
   /*doc id와 userid 가 다른 경우 */
   fs.readFile(process.cwd()+'/'+doc_id+'.txt','utf-8',function(err,data){
