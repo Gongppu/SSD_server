@@ -1,11 +1,9 @@
-var express = require('express');
+/*var express = require('express');
 var app=express();
 var router = express.Router();
 var request = require('request');
-var crypto=require('crypto-promise');
+//var crypto=require('crypto-promise');
 
-var client_id = '1tNrYYQwexvLGgXkCOiM';
-var client_secret = 'm88irzNnjV';
 var state = "RAMDOM_STATE";
 var url="http://localhost:3006"
 var redirectURI = encodeURI(url+"/naver/callback");
@@ -144,3 +142,4 @@ router.get('/access',function(req,res){
   });
 
  module.exports = router;
+*/

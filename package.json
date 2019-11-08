@@ -11,6 +11,7 @@
     "cors": "^2.8.5",
     "crypto-promise": "^2.1.0",
     "express": "^4.17.1",
+    "firebase-admin": "^8.7.0",
     "googleapis": "^39.2.0",
     "http-errors": "^1.6.3",
     "jsonwebtoken": "^8.3.0",

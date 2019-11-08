@@ -7,7 +7,7 @@ const db = require('../../module/pool.js');
 router.get('/:doc_id', async(req, res) => { //문서 가져오기
   let doc_id = req.params.doc_id;
   let user_id=req.headers.user_id;
-
+  var doc_title;
   console.log(user_id);
 
   if(!doc_id || !user_id){ //클라에서 id 미전달
@@ -16,6 +16,25 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     });
     return;
   }
+  
+  try{
+
+    let gettitleQuery =
+    `
+    SELECT doc_title FROM ssd.doc WHERE doc_id =?
+    `;
+    
+    let gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
+
+    doc_title=gettitle[0][0].doc_title;
+  }catch(err){
+    res.status(500).send({
+      message : "Internal Server Error"
+    });
+    console.log(err);
+    return;
+  }
+  
   /*doc id가 없을 경우 */
   /*doc id와 userid 가 다른 경우 */
   fs.readFile(process.cwd()+'/'+doc_id+'.txt','utf-8',function(err,data){
@@ -23,6 +42,7 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     res.status(201).send({
       message : "success",
       doc_id : doc_id,
+      doc_title : doc_title,
       content : data
     });
     return;
