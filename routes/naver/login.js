@@ -3,10 +3,10 @@ var app=express();
 var router = express.Router();
 var request = require('request');
 
-var client_id = 'ztKxe6pwd1G6_AC5aWtA';
-var client_secret = 'PVMF5Q5Put';
+var client_id = 'PYrDW3Wffhew6I1SsTQN';
+var client_secret = 'ZW3eohGA0D';
 var state = "RAMDOM_STATE";
-var url="sharesdocument.ml"
+var url="sharesdocument.ml";
 var redirectURI = encodeURI("https://"+url+"/naver/callback");
 var api_url = "";
 
@@ -103,13 +103,18 @@ router.get('/naverlogin', function (req, res) {
 console.log(options);
         request.get(options, function (error, response, body) {
           if (!error && response.statusCode == 200) {
-            res.end("success login");
+            res.end("success login!");
           }else{
             res.status(response.statusCode).end();
             console.log('error = ' + response.statusCode);
           }
         });
-	return;;
+	return;
+	}else{
+	  res.status(response.statusCode).end();
+	  console.log('error = ' +response.statusCode);
+	}
+	});
 });
 
  router.get('/member/:token', function (req, res) {
@@ -127,7 +132,7 @@ console.log(options);
 
         var result=JSON.parse(body);
         console.log(result.response.email);
-        return;
+        res.status(200).end();
 
       } else {
         console.log('error');
@@ -138,6 +143,6 @@ console.log(options);
       }
     });
 
-	res.status(200).end();
+res.status(200).end();
   });
  module.exports = router;
