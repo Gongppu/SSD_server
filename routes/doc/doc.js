@@ -7,7 +7,7 @@ const db = require('../../module/pool.js');
 router.get('/:doc_id', async(req, res) => { //문서 가져오기
   let doc_id = req.params.doc_id;
   let user_id=req.headers.user_id;
-  var doc_title;
+  var gettitle;
   console.log(user_id);
 
   if(!doc_id){ //클라에서 id 미전달
@@ -21,12 +21,11 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
 
     let gettitleQuery =
     `
-    SELECT doc_title FROM ssd.doc WHERE doc_id =?
+    SELECT doc_title, todo_count, toggle_count FROM ssd.doc WHERE doc_id =?
     `;
     
-    let gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
+    gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
 
-    doc_title=gettitle[0][0].doc_title;
   }catch(err){
     res.status(500).send({
       message : "Internal Server Error"
@@ -42,7 +41,9 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     res.status(201).send({
       message : "success",
       doc_id : doc_id,
-      doc_title : doc_title,
+      doc_title : gettitle[0][0].doc_title,
+      todo_count : gettitle[0][0].todo_count,
+      toggle_count : gettitle[0][0].toggle_count,
       content : data
     });
     return;
@@ -56,18 +57,26 @@ router.post('/', async(req, res) => { //문서 저장
     let user_id = req.body.user_id;
     let doc_id = req.body.doc_id;
     let doc_title = req.body.doc_title;
+    let todo_count = req.body.todo_count;
+    let toggle_count = req.body.toggle_count;
     let doc_body = req.body.doc_body;
     
     /* user id 랑 doc id 일치 여부 확인*/
 
+    if(!user_id || !doc_id || !doc_title || !todo_count || !toggle_count || !doc_body){
+      res.status(401).send({
+        message : "no value"
+      });
+      return;
+    }
     try{
 
       let updatetitleQuery =
       `
-      UPDATE ssd.doc SET doc_title = ? WHERE doc_id = ?
+      UPDATE ssd.doc SET doc_title = ? , todo_count = ?, toggle_count = ? WHERE doc_id = ?
       `;
       
-      let updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, doc_id]);
+      let updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, todo_count, toggle_count, doc_id]);
 
     }catch(err){
       res.status(500).send({
