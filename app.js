@@ -9,6 +9,18 @@ var authRouter=require('./routes/auth');
 
 var app = express();
 var cors=require('cors');
+// Web push
+const webpush = require('web-push');
+
+// VAPID keys should only be generated only once.
+const vapidKeys = webpush.generateVAPIDKeys();
+
+webpush.setGCMAPIKey('AAAATTt49_o:APA91bFpp3njZZTXqTM6VjWBw1L6tHMYl06IbF-J4N1LEbZVLVceOPoGiwYPWq81JR04aNZXlNazC8qcCuDUA_lqFgl7-R54JfQHlvxjCiA2g3coHLcqCntXyl4MhqBp7fK09GiAr4wm');
+webpush.setVapidDetails(
+	'mailto:your E-Mail',
+	vapidKeys.publicKey,
+	vapidKeys.privateKey
+);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
