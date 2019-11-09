@@ -109,7 +109,7 @@ router.post('/', async(req, res) => { //문서 저장
 
 router.delete('/:doc_id',async(req, res) => { //문서 삭제
   let doc_id = req.params.doc_id;
-  let user_id=req.headers.user_id;
+  //let user_id=req.headers.user_id;
 
   /* user id 랑 doc id 일치 여부 확인*/
 

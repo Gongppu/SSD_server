@@ -5,7 +5,6 @@ const db = require('../../module/pool.js');
 
 router.get('/:user_id', async(req, res) => { //문서 리스트
   let user_id = req.params.user_id;
-  console.log(user_id);
 
   if(!user_id || user_id=="undefined"){ //처음 접속하는 경우
 
@@ -46,7 +45,11 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
     
   }
 
+  let usernoQuery =
+      'SELECT user_no FROM ssd.user WHERE user_id=?';
   
+  let userno = await db.queryParam_Arr(usernoQuery,[user_id]);
+        
   let checkdocQuery =
     `
     SELECT d.doc_id, d.doc_title, d.is_share 
@@ -72,6 +75,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
       res.status(201).send({
         message : "success",
         user_id : user_id,
+        user_no : userno[0][0].user_no,
         list : doc_list
       });
         

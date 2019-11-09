@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const db = require('../../module/pool.js');
-
+var fs=require('fs');
 
 router.get('/:user_id', async(req, res) => { //문서 추가하기
     let user_id = req.params.user_id;
@@ -37,7 +37,7 @@ router.get('/:user_id', async(req, res) => { //문서 추가하기
         //'SELECT doc_id FROM ssd.doc WHERE doc_idx = (SELECT LAST_INSERT_ID())'; //랜덤 id 확인
         
         //let autoid = await db.queryParam_Arr(autoid_Query);
-        fs.writeFile(process.cwd()+'/'+doc_id+'.txt',str,function(err){
+        fs.writeFile(process.cwd()+'/'+doc_id+'.txt','',function(err){
           if(err){
             res.status(500).send({
               message : "Internal Server Error"

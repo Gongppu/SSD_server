@@ -16,7 +16,7 @@ router.get('/:doc_id', async(req, res) => { //공유하고 있는 멤버 리스�
 
       try{
         
-        //공유하고 있는 멤버 리스트
+        //문서 인덱스
         let knowidxQuery = 'SELECT doc_idx FROM ssd.doc WHERE doc_id = ?';
         let knowidx=await db.queryParam_Arr(knowidxQuery,[doc_id]);
         
