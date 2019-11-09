@@ -4,13 +4,10 @@ const db = require('../../module/pool.js');
 
 
 router.post('/', async(req, res) => { //알람 보낼 유저 선택
-    let user_list = req.body.invite_list;
+    let user_list = JSON.parse(req.body.user_list);
     let doc_id=req.body.doc_id;
-
-    console.log(user_list);
-    console.log(user_list[0]);
-  
-    if(!user_id || !doc_id){ //클라에서 id 미전달
+    console.log(user_list[9]);
+    if(!user_list || !doc_id){ //클라에서 id 미전달
       res.status(401).send({
         message : "null value"
       });

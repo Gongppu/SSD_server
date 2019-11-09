@@ -46,18 +46,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
     
   }
 
-  let getusernoQuery =
-  'SELECT user_no FROM ssd.user WHERE user_id = ?';
-
-  let getuserid = await db.queryParam_Arr(getusernoQuery,[user_no]);
-    
-  if(!getuserid){
-    res.status(500).send({
-      message : "Internal Server Error"
-    });
-    return;
-  }
-  var user_no=getuserid[0][0].user_no;
+  
   let checkdocQuery =
     `
     SELECT d.doc_id, d.doc_title, d.is_share 
@@ -82,7 +71,6 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
       }
       res.status(201).send({
         message : "success",
-        user_no : user_no,
         user_id : user_id,
         list : doc_list
       });

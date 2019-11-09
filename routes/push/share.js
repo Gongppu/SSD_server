@@ -20,12 +20,12 @@ router.get('/:doc_id', async(req, res) => { //공유하고 있는 멤버 리스�
         let knowidxQuery = 'SELECT doc_idx FROM ssd.doc WHERE doc_id = ?';
         let knowidx=await db.queryParam_Arr(knowidxQuery,[doc_id]);
         
-        let shareuserlistQuery = 'SELECT user_email FROM ssd.user WHERE user_no IN (SELECT user_idx FROM ssd.user_doc WHERE doc_idx = ?)';
+        let shareuserlistQuery = 'SELECT user_email,user_no  FROM ssd.user WHERE user_no IN (SELECT user_idx FROM ssd.user_doc WHERE doc_idx = ?)';
         let shareuserlist = await db.queryParam_Arr(shareuserlistQuery,[knowidx[0][0].doc_idx]);
    
         let doctitleQuery = 'SELECT doc_title FROM ssd.doc WHERE doc_id = ?';
         let doctitle = await db.queryParam_Arr(doctitleQuery,[doc_id]);
-        console.log(shareuserlist[0]);
+        
         res.status(201).send({
           message : "success",
           doc_title : doctitle[0][0].doc_title,
