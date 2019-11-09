@@ -60,11 +60,12 @@ router.post('/', async(req, res) => { //알람 보낼 유저 선택
         
           let deletealarmQuery = 'DELETE FROM ssd.alarm WHERE doc_title = ? AND user_no = ?';
           let deletealarm = await db.queryParam_Arr(deletealarmQuery,[alarm[0][0].doc_title, user_no]);
+          title=alarm[0][0].doc_title;
         
         }
         res.status(201).send({
           message : "success",
-          doc_title : alarm[0][0].doc_title,
+          doc_title : title,
           doc_id : doc_id
         });
           
