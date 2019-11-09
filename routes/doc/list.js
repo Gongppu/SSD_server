@@ -22,7 +22,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
         return;
       }
       let automakeidQuery =
-      'SELECT user_id FROM ssd.user WHERE user_no = (SELECT LAST_INSERT_ID());';
+      'SELECT user_id FROM ssd.user WHERE user_no = (SELECT LAST_INSERT_ID())';
   
       let automakeid = await db.queryParam_None(automakeidQuery);
         
@@ -34,6 +34,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
       }
       
       user_id=automakeid[0][0].user_id;
+
       
     }catch(err){
       res.status(500).send({
@@ -44,12 +45,24 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
     }
     
   }
-  
+
+  let getusernoQuery =
+  'SELECT user_no FROM ssd.user WHERE user_id = ?';
+
+  let getuserid = await db.queryParam_Arr(getusernoQuery,[user_no]);
+    
+  if(!getuserid){
+    res.status(500).send({
+      message : "Internal Server Error"
+    });
+    return;
+  }
+  var user_no=getuserid[0][0].user_no;
   let checkdocQuery =
     `
-    SELECT d.doc_id, d.doc_title, ud.is_share 
-    FROM ssd.doc as d , ssd.user_doc as ud 
-    WHERE d.doc_idx=ud.doc_idx AND d.user_id = ?
+    SELECT d.doc_id, d.doc_title, d.is_share 
+    FROM ssd.doc as d
+    WHERE d.user_id = ?
     `;
 
     try{
@@ -69,6 +82,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
       }
       res.status(201).send({
         message : "success",
+        user_no : user_no,
         user_id : user_id,
         list : doc_list
       });

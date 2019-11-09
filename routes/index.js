@@ -17,10 +17,10 @@ router.use('/doc', require('./doc/index.js'));
 
 
 // push
-//router.use('/push', require('./push/push.js'));
+router.use('/push', require('./push/push.js'));
 
-// google
-//router.use('/google', require('./google/index.js'));
+// list
+router.use('/share', require('./push/share.js'));
 
 
 module.exports = router;
