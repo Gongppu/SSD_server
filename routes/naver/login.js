@@ -1,13 +1,15 @@
-/*var express = require('express');
+var express = require('express');
 var app=express();
 var router = express.Router();
 var request = require('request');
-//var crypto=require('crypto-promise');
+var crypto=require('crypto-promise');
 
 var state = "RAMDOM_STATE";
 var url="http://localhost:3006"
 var redirectURI = encodeURI(url+"/naver/callback");
 var api_url = "";
+var client_id="1tNrYYQwexvLGgXkCOiM";
+var client_secret="m88irzNnjV";
 
 router.get('/naverlogin', function (req, res) {
 
@@ -97,12 +99,13 @@ router.get('/naverlogin', function (req, res) {
       if (!error && response.statusCode == 200) {
         result=JSON.parse(body);
         console.log(result.access_token);
-
+        
         const salt=await crypto.randomBytes(32);
         const hashedtoken=await crypto.pbkdf2(result.access_token, salt.toString('base64'),100000,32,'sha512');
-        res.end("success login");
-        //var url_str=url+"/naver/access/?id="+hashedtoken.toString('base64');
-        //res.end("<html><meta http-equiv=\"refresh\" content=\"1; URL=\'"+url_str+"\'\">succeess login</html>");
+       
+        var url_str=url+"/naver/temp/"+result.access_token;
+        res.end("<html><meta http-equiv=\"refresh\" content=\"1; URL="+url_str+"\">succeess login</html>");
+      
       } else {
         res.status(response.statusCode).end();
         console.log('error = ' + response.statusCode);
@@ -110,13 +113,13 @@ router.get('/naverlogin', function (req, res) {
     });
     return;
 });
-router.get('/access',function(req,res){
- 
-  res.end();
-})
- router.get('/member/:token', function (req, res) {
-
-    var header="Bearer "+req.params.token;
+ router.get('/temp/:token',function(req,res){
+    res.end('wait please...');
+ });
+ router.post('/member', function (req, res) {
+    console.log(user_no);
+    var user_no=req.body.user_no;
+    var header="Bearer "+req.body.token;
     console.log(header);
     var api_url = 'https://openapi.naver.com/v1/nid/me';
    
@@ -142,4 +145,3 @@ router.get('/access',function(req,res){
   });
 
  module.exports = router;
-*/

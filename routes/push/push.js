@@ -7,7 +7,7 @@ router.post('/', async(req, res) => { //알람 보낼 유저 선택
     let user_list = JSON.parse(req.body.user_list);
     let doc_id=req.body.doc_id;
     console.log(user_list[0]);
-    if(!user_list || !doc_id){ //클라에서 id 미전달
+    if(! Array.isArrayuser_list || !doc_id){ //클라에서 id 미전달
       res.status(401).send({
         message : "null value"
       });
@@ -57,11 +57,14 @@ router.post('/', async(req, res) => { //알람 보낼 유저 선택
         let title;
         let doc_id;
         if(alarm[0][0]){
-        
+         //알람 온것이 있는지
+          let docidQuery = 'SELECT doc_id FROM ssd.doc WHERE doc_title = ?';
+          let docid = await db.queryParam_Arr(docidQuery,[doc_title]);
+          
           let deletealarmQuery = 'DELETE FROM ssd.alarm WHERE doc_title = ? AND user_no = ?';
           let deletealarm = await db.queryParam_Arr(deletealarmQuery,[alarm[0][0].doc_title, user_no]);
           title=alarm[0][0].doc_title;
-        
+          doc_id=alarm[0][0].doc_id;
         }
         res.status(201).send({
           message : "success",

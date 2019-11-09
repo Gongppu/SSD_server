@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
 router.use('/auth', require('./auth/index.js'));
 
 // naver login
-//router.use('/naver', require('./naver/index.js'));
+router.use('/naver', require('./naver/index.js'));
 
 // doc
 router.use('/doc', require('./doc/index.js'));
