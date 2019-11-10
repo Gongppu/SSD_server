@@ -9,7 +9,7 @@ var url="https://sharesdocument.ml"
 var redirectURI = encodeURI(url+"/naver/callback");
 var api_url = "";
 var client_id="PYrDW3Wffhew6I1SsTQN";
-var client_secret="4xIatc0NIC";
+var client_secret="ZW3eohGA0D";
 
 router.get('/naverlogin', function (req, res) {
   api_url = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=' + client_id + '&redirect_uri=' + redirectURI + '&state=' + state;

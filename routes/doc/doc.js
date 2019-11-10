@@ -16,6 +16,7 @@ router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
     });
     return;
   }
+
   try{
 
     let gettitleQuery =
@@ -23,7 +24,7 @@ router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
     SELECT is_open, doc_img, doc_title, todo_count, toggle_count FROM ssd.doc WHERE doc_id =?
     `;
     
-    let gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
+    gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
     
 
     if(gettitle[0][0].is_open != "undefined" && gettitle[0][0].is_open != user_no){
@@ -40,7 +41,7 @@ router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
         let updateopen = await db.queryParam_Arr(updateidQuery,[user_no,doc_id]);
     
     }
-   
+
   }catch(err){
     res.status(500).send({
       message : "Internal Server Error"
@@ -80,7 +81,7 @@ router.post('/', async(req, res) => { //문서 저장
     let doc_body = req.body.doc_body;
     
     /* user id 랑 doc id 일치 여부 확인*/
-
+console.log(req.body);
     if(!user_id || !doc_id || !doc_title || !todo_count || !toggle_count ){
       res.status(401).send({
         message : "no value"
@@ -93,19 +94,19 @@ router.post('/', async(req, res) => { //문서 저장
       if(doc_img){
         updatetitleQuery =
         `
-        UPDATE ssd.doc SET doc_title = ? , todo_count = ?, toggle_count = ?, doc_img = ? WHERE doc_id = ?
+        UPDATE ssd.doc SET is_open = ?, doc_title = ? , todo_count = ?, toggle_count = ?, doc_img = ? WHERE doc_id = ?
         `;
         
-        updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, todo_count, toggle_count, doc_img, doc_id]);
+        updatetitle = await db.queryParam_Arr(updatetitleQuery,[user_id, doc_title, todo_count, toggle_count, doc_img, doc_id]);
   
       }else{
 
         updatetitleQuery =
         `
-        UPDATE ssd.doc SET doc_title = ? , todo_count = ?, toggle_count = ? WHERE doc_id = ?
+        UPDATE ssd.doc SET is_open = ? , doc_title = ? , todo_count = ?, toggle_count = ? WHERE doc_id = ?
         `;
         
-        updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, todo_count, toggle_count, doc_id]);
+        updatetitle = await db.queryParam_Arr(updatetitleQuery,[user_id, doc_title, todo_count, toggle_count, doc_id]);
   
       }
       
