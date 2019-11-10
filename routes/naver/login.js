@@ -2,14 +2,14 @@ var express = require('express');
 var app=express();
 var router = express.Router();
 var request = require('request');
-var crypto=require('crypto-promise');
+const db = require('../../module/pool.js');
 
 var state = "RAMDOM_STATE";
-var url="http://localhost:3006"
+var url="https://sharesdocument.ml"
 var redirectURI = encodeURI(url+"/naver/callback");
 var api_url = "";
-var client_id="1tNrYYQwexvLGgXkCOiM";
-var client_secret="m88irzNnjV";
+var client_id="PYrDW3Wffhew6I1SsTQN";
+var client_secret="4xIatc0NIC";
 
 router.get('/naverlogin', function (req, res) {
 
@@ -98,14 +98,29 @@ router.get('/naverlogin', function (req, res) {
     request.get(options, async function (error, response, body) {
       if (!error && response.statusCode == 200) {
         result=JSON.parse(body);
-        console.log(result.access_token);
-        
-        const salt=await crypto.randomBytes(32);
-        const hashedtoken=await crypto.pbkdf2(result.access_token, salt.toString('base64'),100000,32,'sha512');
-       
-        var url_str=url+"/naver/temp/"+result.access_token;
-        res.end("<html><meta http-equiv=\"refresh\" content=\"1; URL="+url_str+"\">succeess login</html>");
+
+        var header = "Bearer " + result.access_token; // Bearer 다음에 공백 추가
+        console.log(header);
+       var api_url = 'https://openapi.naver.com/v1/nid/me';
+       var options = {
+           url: api_url,
+           headers: {'Authorization': header}
+        };
+       request.get(options, function (error, response, body) {
+         if (!error && response.statusCode == 200) {
+          var result=JSON.parse(body);
+          console.log(result.response.email);
+          var url_str =url+"/naver/temp/"+result.response.email;
+          res.end("<html><meta http-equiv=\"refresh\" content=\"1; URL="+url_str+"\">succeess login</html>");
       
+          res.status(200).end();
+        } else {
+          console.log('error');
+          res.status(response.statusCode).end();
+          console.log('error = ' + response);
+        }
+    });
+        
       } else {
         res.status(response.statusCode).end();
         console.log('error = ' + response.statusCode);
@@ -114,34 +129,34 @@ router.get('/naverlogin', function (req, res) {
     return;
 });
  router.get('/temp/:token',function(req,res){
-    res.end('wait please...');
+    res.end('wait please..');
  });
- router.post('/member', function (req, res) {
-    console.log(user_no);
-    var user_no=req.body.user_no;
-    var header="Bearer "+req.body.token;
-    console.log(header);
-    var api_url = 'https://openapi.naver.com/v1/nid/me';
-   
-    var options = {
-        url: api_url,
-        headers: {'Authorization': header}
-     };
-    
-     request.get(options, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          var result=JSON.parse(body);
-          console.log(result.response.email);
-          res.status(200).end();
-        } else {
-          console.log('error');
-          res.status(response.statusCode).end();
-          console.log('error = ' + response.statusCode);
-        }
-    });
 
-    console.log("/naver/member end");
-    res.status(200).end();
+ router.post('/member', async function (req, res) {
+    let email = req.body.email;
+    let user_no=req.body.user_no;
+    console.log(email+ user_no);
+    try{
+      //이메일 추가
+    let addemailQuery =
+    'UPDATE ssd.user SET user_email = ? WHERE user_no = ?';
+
+    let addemail = await db.queryParam_Arr(addemailQuery,[email, user_no]);
+
+    res.status(201).send({
+      message : "success",
+      is_true :1
+    });
+    res.end();
+    }catch(err){
+      res.status(500).send({
+        message : "Internal Server Error",
+        is_true : 0
+      });
+      console.log(err);
+      return;
+    }
+    
   });
 
  module.exports = router;
