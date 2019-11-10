@@ -26,8 +26,8 @@ router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
     let gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
     
 
-    if(gettitle[0][0].is_open !='' && gettitle[0][0].is_open != user_no){
-      res.status(201).send({
+    if(gettitle[0][0].is_open != "undefined" && gettitle[0][0].is_open != user_no){
+      res.status(202).send({
         message : "denied"
       });
       return;
@@ -37,7 +37,7 @@ router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
         UPDATE ssd.doc SET is_open = ? WHERE doc_id = ?
         `;
         
-        let updateopen = await db.queryParam_Arr(updateidQuery,[user_id,doc_id]);
+        let updateopen = await db.queryParam_Arr(updateidQuery,[user_no,doc_id]);
     
     }
    
