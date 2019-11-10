@@ -58,16 +58,16 @@ router.get('/:user_id/:doc_id', async(req, res) => { //문서 리스트
       'SELECT user_no FROM ssd.user WHERE user_id=?';
   
   let userno = await db.queryParam_Arr(usernoQuery,[user_id]);
-        
+  var un=userno[0][0].user_no;      
   let checkdocQuery =
     `
     SELECT d.doc_id, d.doc_title, d.is_share, d.doc_img
-    FROM ssd.doc as d
-    WHERE d.user_id = ?
+    FROM ssd.doc as d, ssd.user_doc as ud
+    WHERE ud.user_idx=? and ud.doc_idx=d.doc_idx
     `;
 
     try{
-      let checkdoc = await db.queryParam_Arr(checkdocQuery,[user_id]);
+      let checkdoc = await db.queryParam_Arr(checkdocQuery,[un]);
 
       let doc_list=[];
       if(checkdoc){
