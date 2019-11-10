@@ -26,7 +26,7 @@ router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
     let gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
     
 
-    if(gettitle[0][0].is_open=='' || gettitle[0][0].is_open != user_no){
+    if(gettitle[0][0].is_open !='' && gettitle[0][0].is_open != user_no){
       res.status(201).send({
         message : "denied"
       });
