@@ -41,7 +41,7 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     res.status(201).send({
       message : "success",
       doc_id : doc_id,
-      doc_img : gettitle[0][0].doc_title,
+      doc_img : gettitle[0][0].doc_img,
       doc_title : gettitle[0][0].doc_title,
       todo_count : gettitle[0][0].todo_count,
       toggle_count : gettitle[0][0].toggle_count,
@@ -65,21 +65,34 @@ router.post('/', async(req, res) => { //문서 저장
     
     /* user id 랑 doc id 일치 여부 확인*/
 
-    if(!doc_img || !user_id || !doc_id || !doc_title || !todo_count || !toggle_count || !doc_body){
+    if(!user_id || !doc_id || !doc_title || !todo_count || !toggle_count || !doc_body){
       res.status(401).send({
         message : "no value"
       });
       return;
     }
     try{
+      let updatetitleQuery;
+      let updatetitle;
+      if(doc_img){
+        updatetitleQuery =
+        `
+        UPDATE ssd.doc SET doc_title = ? , todo_count = ?, toggle_count = ?, doc_img = ? WHERE doc_id = ?
+        `;
+        
+        updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, todo_count, toggle_count, doc_img, doc_id]);
+  
+      }else{
 
-      let updatetitleQuery =
-      `
-      UPDATE ssd.doc SET doc_title = ? , todo_count = ?, toggle_count = ?, doc_img = ? WHERE doc_id = ?
-      `;
+        updatetitleQuery =
+        `
+        UPDATE ssd.doc SET doc_title = ? , todo_count = ?, toggle_count = ? WHERE doc_id = ?
+        `;
+        
+        updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, todo_count, toggle_count, doc_id]);
+  
+      }
       
-      let updatetitle = await db.queryParam_Arr(updatetitleQuery,[doc_title, todo_count, toggle_count, doc_img, doc_id]);
-
     }catch(err){
       res.status(500).send({
         message : "Internal Server Error"
