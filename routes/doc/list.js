@@ -52,7 +52,7 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
         
   let checkdocQuery =
     `
-    SELECT d.doc_id, d.doc_title, d.is_share 
+    SELECT d.doc_id, d.doc_title, d.is_share, d.doc_img
     FROM ssd.doc as d
     WHERE d.user_id = ?
     `;
@@ -66,7 +66,8 @@ router.get('/:user_id', async(req, res) => { //문서 리스트
           var doc_obj={
             doc_id : checkdoc[0][i].doc_id,
             doc_title : checkdoc[0][i].doc_title,
-            doc_is_share : checkdoc[0][i].is_share
+            doc_is_share : checkdoc[0][i].is_share,
+            doc_img : checkdoc[0][i].doc_img
           };
           
           doc_list.push(doc_obj);
