@@ -4,11 +4,11 @@ var fs=require('fs');
 
 const db = require('../../module/pool.js');
 
-router.get('/:doc_id', async(req, res) => { //문서 가져오기
+router.get('/:doc_id/:user_no', async(req, res) => { //문서 가져오기
   let doc_id = req.params.doc_id;
-  let user_id=req.headers.user_id;
+  let user_no=req.params.user_no;
   var gettitle;
-  console.log(user_id);
+  console.log(user_no);
 
   if(!doc_id){ //클라에서 id 미전달
     res.status(401).send({
@@ -16,7 +16,6 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     });
     return;
   }
-  
   try{
 
     let gettitleQuery =
@@ -24,17 +23,24 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     SELECT is_open, doc_img, doc_title, todo_count, toggle_count FROM ssd.doc WHERE doc_id =?
     `;
     
-    gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
-    if(gettitle[0][0].is_open==0){
-        let updateopenQuery =
-      `
-      UPDATE ssd.doc SET is_open = 1 WHERE doc_id = ?
-      `;
-      
-      updateopen = await db.queryParam_Arr(updateopenQuery,[doc_id]);
-      
-    }
+    let gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
+    
 
+    if(gettitle[0][0].is_open=='' || gettitle[0][0].is_open != user_no){
+      res.status(201).send({
+        message : "denied"
+      });
+      return;
+    }else{
+        let updateidQuery =
+        `
+        UPDATE ssd.doc SET is_open = ? WHERE doc_id = ?
+        `;
+        
+        let updateopen = await db.queryParam_Arr(updateidQuery,[user_id,doc_id]);
+    
+    }
+   
   }catch(err){
     res.status(500).send({
       message : "Internal Server Error"
@@ -50,6 +56,7 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
     res.status(201).send({
       message : "success",
       doc_id : doc_id,
+      is_open : gettitle[0][0].is_open,
       doc_img : gettitle[0][0].doc_img,
       doc_title : gettitle[0][0].doc_title,
       todo_count : gettitle[0][0].todo_count,
@@ -74,7 +81,7 @@ router.post('/', async(req, res) => { //문서 저장
     
     /* user id 랑 doc id 일치 여부 확인*/
 
-    if(!user_id || !doc_id || !doc_title || !todo_count || !toggle_count || !doc_body){
+    if(!user_id || !doc_id || !doc_title || !todo_count || !toggle_count ){
       res.status(401).send({
         message : "no value"
       });
