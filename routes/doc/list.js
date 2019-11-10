@@ -3,9 +3,18 @@ var router = express.Router();
 
 const db = require('../../module/pool.js');
 
-router.get('/:user_id', async(req, res) => { //문서 리스트
+router.get('/:user_id/:doc_id', async(req, res) => { //문서 리스트
   let user_id = req.params.user_id;
-
+  let doc_id=req.params.doc_id;
+  if(!doc_id || doc_id=="undefined"){
+    let updateopenQuery =
+    `
+    UPDATE ssd.doc SET is_open = 0 WHERE doc_id = ?
+    `;
+    
+    let updateopen = await db.queryParam_Arr(updateopenQuery,[doc_id]);
+    
+  }
   if(!user_id || user_id=="undefined"){ //처음 접속하는 경우
 
     try{

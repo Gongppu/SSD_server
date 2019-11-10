@@ -21,10 +21,19 @@ router.get('/:doc_id', async(req, res) => { //문서 가져오기
 
     let gettitleQuery =
     `
-    SELECT doc_img, doc_title, todo_count, toggle_count FROM ssd.doc WHERE doc_id =?
+    SELECT is_open, doc_img, doc_title, todo_count, toggle_count FROM ssd.doc WHERE doc_id =?
     `;
     
     gettitle = await db.queryParam_Arr(gettitleQuery,[doc_id]);
+    if(gettitle[0][0].is_open==0){
+        let updateopenQuery =
+      `
+      UPDATE ssd.doc SET is_open = 1 WHERE doc_id = ?
+      `;
+      
+      updateopen = await db.queryParam_Arr(updateopenQuery,[doc_id]);
+      
+    }
 
   }catch(err){
     res.status(500).send({
