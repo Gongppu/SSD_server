@@ -1,6 +1,6 @@
 # SSD_server
 
-#### ```TAB으로 이동할 필요 없이 내 생각을 한번에 정리하자 ```
+#### ```TAB으로 웹브라우저를 이동할 필요 없이 내 생각을 한번에 정리하자 ```
 
 
 *웨일브라우저에서는 하나의 창에서 아래의 작업을 전부 할 수 있다*
@@ -18,10 +18,13 @@
 * 네이버 아이디로 로그인 API
 
 </br></br>
-## Screen Shot
-<img src="https://user-images.githubusercontent.com/37530599/78291097-c1ae7400-755f-11ea-950c-08c4fbddcb9e.png" width="70%"></img>
-<img src="https://user-images.githubusercontent.com/37530599/78291118-cecb6300-755f-11ea-83f7-17b12951e396.png" width="70%"></img>
-<img src="https://user-images.githubusercontent.com/37530599/78291128-d4c14400-755f-11ea-8949-79ed65938616.png" width="70%"></img>
+## Screen Shots
+<img src="https://user-images.githubusercontent.com/37530599/78291097-c1ae7400-755f-11ea-950c-08c4fbddcb9e.png" width="60%"></img>
+<hr>
+<img src="https://user-images.githubusercontent.com/37530599/78291118-cecb6300-755f-11ea-83f7-17b12951e396.png" width="60%"></img>
+<hr>
+<img src="https://user-images.githubusercontent.com/37530599/78291128-d4c14400-755f-11ea-8949-79ed65938616.png" width="60%"></img>
+<hr>
 
 ## Setting
 **config/ 폴더 생성 후, 아래의 4개 파일**
